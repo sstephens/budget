@@ -14,7 +14,7 @@ $color-darkblue: #2b4796;
 $color-mediumblue: #79b6f2;
 $color-green: #55fdc5;
 $color-white: #fff;
-$color-offwhite: #fefefe;
+$color-offwhite: #efefef;
 $color-lightgrey: #ccc;
 $color-mediumgrey: #888;
 $color-darkgrey: #555;
@@ -92,6 +92,10 @@ button {
 	border-radius: 3px;
 	font-size: 16px;
 	cursor: pointer;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-o-appearance: none;
+	-ms-appearance: none;
 
 	&.grey {
 		border-color: $color-mediumgrey;
