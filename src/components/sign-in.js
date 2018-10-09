@@ -2,12 +2,13 @@
  * @module Components
  *
  */
+import { resolve, reject } from 'rsvp';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '@app/styles/components/sign-in.scss';
 
 const SIGNIN_FAIL_ERROR = "Email or Password is incorrect";
-const SIGNUP_FAIL_ERROR = "There was an error creating your account";
+//const SIGNUP_FAIL_ERROR = "There was an error creating your account";
 
 /**
  * Simple password encryption for passing the password
@@ -80,17 +81,20 @@ class SignIn extends Component {
 		const email = this.state.email.trim()
 		const pword = this.state.password.trim();
 
-		signIn({ email, password: pword })
+		sendSignIn({ email, password: pword })
 			//.then(data => setAuthUser(data))
 			.catch(error => this.updateState({ error }));
 	}
 
 	createAccount() {
 		const email = this.state.email.trim()
-		const pword = this.state.password.trim();
-		const cfpword = this.state.confirmPassword.trim()
+		const password = this.state.password.trim();
+		const confirmPassword = this.state.confirmPassword.trim()
 		const fullname = this.state.fullname.trim();
 
+		sendCreate({ email, fullname, password, confirmPassword })
+		//.then(data => setAuthUser(data))
+			.catch(error => this.updateState({ error }));
 	}
 
 	render() {

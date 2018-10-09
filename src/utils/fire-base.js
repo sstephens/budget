@@ -9,13 +9,15 @@ export const firestore = firebase.firestore;
 
 export const loadFireBase = () => {
 	const config = {
-    apiKey: "AIzaSyCJDLjl0-DPLTVTC30AJCmKPTMT1YGA1M8",
-    authDomain: "budget-ce2a7.firebaseapp.com",
-    databaseURL: "https://budget-ce2a7.firebaseio.com",
-    projectId: "budget-ce2a7",
-    storageBucket: "budget-ce2a7.appspot.com",
-    messagingSenderId: "303560310286"
+		apiKey: window.FIREBASE_APIKEY,
+		authDomain: window.FIREBASE_AUTH_DOMAIN,
+		databaseURL: window.FIREBASE_DATABASE_URL,
+		projectId: window.FIREBASE_PROJECT_ID,
+		storageBucket: window.FIREBASE_STORAGE_BUCKET,
+		messagingSenderId: window.FIREBASE_MESSAGING_SENDER_ID,
 	};
+
+	window.console.log('config', config, window.process);
 
   firebase.initializeApp(config);
 };

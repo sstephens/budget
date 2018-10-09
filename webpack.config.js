@@ -1,9 +1,13 @@
 
+//require('dotenv').config();
+//process.env.DEBUG = process.env.NODE_ENV !== 'production';
+
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-// const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 	entry: './src/index.js',
@@ -56,15 +60,12 @@ module.exports = {
   },
 
 	plugins: [
+    new Dotenv(),
 		new CleanWebpackPlugin(['dist']),
 		new HtmlWebpackPlugin({
 			template: './public/index.html',
 			favicon: './public/images/budget_logo.png'
 		}),
-		// new CopyWebpackPlugin([
-		//   { from: 'public/images', to: 'dist/images/' }
-		//   //{ from: path.resolve(__dirname, 'public/images'), to: path.resolve(__dirname, '/dist/images') }
-		// ]),
 		new webpack.HotModuleReplacementPlugin()
 	],
 
@@ -74,6 +75,27 @@ module.exports = {
 		contentBase: path.join(__dirname, 'dist'),
     compress: true,
     port: 4200,
-		hotOnly: true
+		hot: true,
   }
 };
+		// new webpack.EnvironmentPlugin([
+		//   'NODE_ENV',
+		//   'DEBUG',
+		//   'FIREBASE_APIKEY',
+		//   'FIREBASE_AUTH_DOMAIN',
+		//   'FIREBASE_DATABASE_URL',
+		//   'FIREBASE_PROJECT_ID',
+		//   'FIREBASE_STORAGE_BUCKET',
+		//   'FIREBASE_MESSAGING_SENDER_ID'
+		// ]),
+		// new webpack.DefinePlugin({
+		//   'process.env': {
+		//     NODE_ENV: JSON.stringify(process.env.NODE_ENV || "development"),
+		//     FIREBASE_APIKEY: JSON.stringify(process.env.fire_base_api_key),
+		//     FIREBASE_AUTH_DOMAIN: JSON.stringify(process.env.fire_base_auth_domain),
+		//     FIREBASE_DATABASE_URL: JSON.stringify(process.env.fire_base_database_url),
+		//     FIREBASE_PROJECT_ID: JSON.stringify(process.env.fire_base_project_id),
+		//     FIREBASE_STORAGE_BUCKET: JSON.stringify(process.env.fire_base_storage_bucket),
+		//     FIREBASE_MESSAGING_SENDER_ID: JSON.stringify(process.env.fire_base_messaging_sender_id)
+		//   }
+		// }),
