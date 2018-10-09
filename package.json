@@ -39,7 +39,8 @@
   "dependencies": {
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
-    "react-dom": "^16.5.2"
+    "react-dom": "^16.5.2",
+    "rsvp": "^4.8.4"
   },
   "engines": {
     "node": "^4.5 || 6.* || >= 7.*"
