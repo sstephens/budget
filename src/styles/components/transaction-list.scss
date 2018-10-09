@@ -45,7 +45,7 @@
 		width: 100%;
 		height: 20px;
 		padding: 30px 0 0;
-		border-bottom: 2px solid $color-mediumgrey;
+		border-bottom: 2px solid $color-darkblue;
 		color: $color-mediumgrey;
 		font-weight: bold;
 	}
@@ -56,7 +56,7 @@
 		& > .transaction-item {
 			width: 100%;
 			min-height: 60px;
-			border-bottom: 1px solid lighten($color-lightgrey, 15%);
+			border-bottom: 1px solid $color-lightgrey;
 			box-sizing: border-box;
 
 			& > span {
@@ -64,6 +64,10 @@
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				overflow: hidden;
+
+				&:first-of-type {
+					color: $color-mediumblue;
+				}
 
 				&:last-of-type {
 					padding: 20px 0 10px;

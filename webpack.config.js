@@ -2,6 +2,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
@@ -13,6 +14,7 @@ module.exports = {
 	output: {
 		filename: 'app.bundle.js',
 		path: path.resolve(__dirname, 'dist'),
+		//publicPath: path.resolve(__dirname, 'public'),
 	},
 
 	resolve: {
@@ -41,9 +43,9 @@ module.exports = {
 			{
 				test: /\.scss$/,
 				use: [
-						"style-loader", // creates style nodes from JS strings
-						"css-loader", // translates CSS into CommonJS
-						"sass-loader" // compiles Sass to CSS, using Node Sass by default
+					"style-loader", // creates style nodes from JS strings
+					"css-loader", // translates CSS into CommonJS
+					"sass-loader" // compiles Sass to CSS, using Node Sass by default
 				]
 			},
 			{
@@ -56,15 +58,20 @@ module.exports = {
 	plugins: [
 		new CleanWebpackPlugin(['dist']),
 		new HtmlWebpackPlugin({
-			template: './public/index.html'
+			template: './public/index.html',
+			favicon: './public/images/budget_logo.png'
 		}),
+		// new CopyWebpackPlugin([
+		//   { from: 'public/images', to: 'dist/images/' }
+		//   //{ from: path.resolve(__dirname, 'public/images'), to: path.resolve(__dirname, '/dist/images') }
+		// ]),
 		new webpack.HotModuleReplacementPlugin()
 	],
 
 	devtool: 'inline-source-map',
 
 	devServer: {
-    contentBase: path.join(__dirname, 'dist'),
+		contentBase: path.join(__dirname, 'dist'),
     compress: true,
     port: 4200,
 		hotOnly: true

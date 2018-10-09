@@ -64,7 +64,9 @@ class TrasactionList extends Component {
 								<div className="transaction-item" key={idx}>
 									<span className="t-item title" title={model.title}>{model.title}</span>
 									<span className="t-item category" title={model.category}>{model.category}</span>
-									<span className="t-item amount" title={model.amount}>{model.amount}</span>
+									<span className="t-item amount" title={(`$${model.amount.toFixed(2)}`)}>
+										{(`$${model.amount.toFixed(2)}`)}
+									</span>
 
 									<span className="t-item notes">
 										<SuperString text={model.notes} />

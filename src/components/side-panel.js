@@ -1,15 +1,33 @@
-
+/**
+ * @module Components
+ *
+ */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '@app/styles/components/side-panel.scss';
 
+/**
+ * `SidePanel`
+ *
+ * Component for renderind a side panel for adding transactions
+ * to the budget
+ *
+ * @class SidePanel
+ */
 class SidePanel extends Component {
 	constructor() {
 		super();
 
+		// create ref for form element
 		this.form = React.createRef();
 	}
 
+	/**
+	 * triggered by the event listener to close the side panel
+	 * when a click is detected off of the side panel
+	 *
+	 * @method outsideClick
+	 */
 	outsideClick(evt) {
 		// exit click listener if d-button is clicked
 		if (evt.target.className.match('d-button') !== null) {
@@ -25,23 +43,39 @@ class SidePanel extends Component {
 		}
 	}
 
+	/**
+	 * notify parents of a close event on the side panel
+	 *
+	 * @method close
+	 */
 	close() {
+		// call onClose if it was provided by the parent
 		if (this.props.onClose) {
 			this.props.onClose();
 		}
 	}
 
+	/**
+	 * Save a budget model to the database
+	 *
+	 * @method saveBudget
+	 */
 	saveBudget() {
+		// get form container
 		const container = this.form.current;
+
+		// throw error if no form container was found
 		if (!container) {
 			throw new Error("saveBudget failed to get the form container ref");
 		}
 
+		// get input elements
 		const elName = container.querySelector('.bf-name');
 		const elCategory = container.querySelector('.bf-category');
 		const elAmount = container.querySelector('.bf-amount');
 		const elNotes = container.querySelector('.bf-notes');
 
+		// get input data
 		const data = {
 			title: elName.value.trim(),
 			category: elCategory.value.trim(),

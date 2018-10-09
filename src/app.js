@@ -1,4 +1,7 @@
-
+/**
+ * @module App
+ *
+ */
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 import '@app/styles/app.scss';
@@ -6,10 +9,18 @@ import '@app/styles/app.scss';
 import SidePanel from '@app/components/side-panel';
 import TransactionList from '@app/components/transaction-list';
 
+/**
+ * `App`
+ *
+ * Main application instance
+ *
+ * @class App
+ */
 class App extends Component {
 	constructor() {
 		super();
 
+		// setup init state for SidePanel child element
 		this.state = { showSidePanel: false };
 	}
 
@@ -38,7 +49,10 @@ class App extends Component {
 			<div className="application-main">
 				<div className="application-header">
 					<div className="application-logo">Budget</div>
-					<div className="add-transaction" onClick={() => this.addTransaction()}>+</div>
+
+					<div className="add-container">
+						<div className="add-transaction" onClick={() => this.addTransaction()}>+</div>
+					</div>
 				</div>
 
 				<div className="application-body">
