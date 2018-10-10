@@ -1,0 +1,23 @@
+
+@import './base';
+
+.application-auth {
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+
+	&.splash-screen {
+		position: relative;
+		background-color: $color-black;
+
+		& > .application-logo {
+			position: absolute;
+			top: 50%;
+			width: 100%;
+			margin: -21px 0 0;
+			color: $color-blue;
+			font-size: 42px;
+			text-align: center;
+		}
+	}
+}

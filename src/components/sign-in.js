@@ -2,13 +2,12 @@
  * @module Components
  *
  */
-import { resolve, reject } from 'rsvp';
+import { reject } from 'rsvp';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import injectService from '@app/utils/inject-service';
 import '@app/styles/components/sign-in.scss';
 
-const SIGNIN_FAIL_ERROR = "Email or Password is incorrect";
-//const SIGNUP_FAIL_ERROR = "There was an error creating your account";
 
 /**
  * Simple password encryption for passing the password
@@ -18,7 +17,7 @@ const SIGNIN_FAIL_ERROR = "Email or Password is incorrect";
  * @param pword {string}
  * @return {string}
  */
-const encryptPassword = (pword) => btoa(pword);
+//const encryptPassword = (pword) => btoa(pword);
 
 /**
  * `SignIn`
@@ -35,12 +34,12 @@ class SignIn extends Component {
 		// isSignIn is a boolean to manage view state between
 		// signup and signin
 		this.state = {
-			email: '',
-			password: '',
-			confirmPassword: '',
-			fullname: '',
+			error: null,
 			isSignIn: true
 		};
+
+		// setup firebase service
+		this.firebase = injectService('firebase');
 	}
 
 	/**
@@ -56,45 +55,76 @@ class SignIn extends Component {
 		// on toggle sign in state then reset
 		// all the form inputs
 		this.setState({
-			email: '',
-			password: '',
-			confirmPassword: '',
-			fullname: '',
+			error: null,
 			isSignIn: state
 		});
+
+		this.signinRef = React.createRef();
+		this.signupRef = React.createRef();
 	}
 
 	/**
-	 * update the state with new values for email, password, and fullname
 	 *
 	 * @public
-	 * @method updateState
-	 * @param newState {object}
+	 * @method triggerError
+	 * @param error {string}
 	 */
-	updateState(newState) {
+	triggerError(error) {
+		//helper method to get error message
+		let message = handleError(error);
+
 		// update state with new values
-		this.setState(Object.assign({}, this.state, parseStateParams(newState)));
+		this.setState(Object.assign({}, this.state, { error: message }));
 	}
 
-
-	signIntoAccount() {
-		const email = this.state.email.trim()
-		const pword = this.state.password.trim();
-
-		sendSignIn({ email, password: pword })
-			//.then(data => setAuthUser(data))
-			.catch(error => this.updateState({ error }));
+	removeError() {
+		this.setState(Object.assign({}, this.state, { error: null }));
 	}
 
-	createAccount() {
-		const email = this.state.email.trim()
-		const password = this.state.password.trim();
-		const confirmPassword = this.state.confirmPassword.trim()
-		const fullname = this.state.fullname.trim();
+	signIntoAccount(evt) {
+		this.removeError();
 
-		sendCreate({ email, fullname, password, confirmPassword })
-		//.then(data => setAuthUser(data))
-			.catch(error => this.updateState({ error }));
+		const el = evt.target.parentNode;
+		const email = el.querySelector('.email').value.trim()
+		const password = el.querySelector('.password').value.trim();
+
+		// handle error state if invaled input
+		if (!(email && password && email.length && password.length)) {
+			this.triggerError("Email or Password is incorrect");
+		}
+
+		this.firebase.auth
+			.signInWithEmailAndPassword(email, password)
+			.catch(error => this.triggerError(error));
+	}
+
+	createAccount(evt) {
+		this.removeError();
+
+		const el = evt.target.parentNode;
+		const email = el.querySelector('.email').value.trim()
+		const password = el.querySelector('.password').value.trim();
+		const confirmPassword = el.querySelector('.confirm-password').value.trim()
+		const fullname = el.querySelector('.fullname').value.trim();
+
+		if (!(email && email.length)) return reject("Email is required");
+		if (!(fullname && fullname.length)) return reject("Full Name is required");
+		if (!(password && password.length)) return reject("Password is required");
+		if (!(confirmPassword && confirmPassword.length)) return reject("Confirm password is required");
+		if (password !== confirmPassword) return reject("Password does not match");
+
+			// .then(auth => {
+			//   window.console.log('auth', auth);
+			//   return firebase.db.collection('userinfo').add({ email, fullname });
+			// })
+
+		return this.firebase.auth
+			.createUserWithEmailAndPassword(email, password)
+			.then(() => {
+				return this.firebase.auth.currentUser.updateProfile({ displayName: fullname })
+					.catch(error => this.triggerError(error));
+			})
+			.catch(error => this.triggerError(error));
 	}
 
 	render() {
@@ -115,13 +145,14 @@ class SignIn extends Component {
 					<div className="account-form">
 						<label>Sign In</label>
 
-						<input type="text" placeholder="Email" onChange={(evt) => this.updateState({ email: evt.target.value })} value={this.email} />
-						<input type="password" placeholder="Password" onChange={(evt) => this.updateState({ password: evt.target.value })} value={this.password} />
+						<input className="email" type="text" placeholder="Email" />
+						<input className="password" type="password" placeholder="Password" />
 
 						<a className="toggle-text" onClick={() => this.toggleSignIn(false)}>Create Account</a>
-						<button className="d-button blue" onClick={(evt) => this.signIntoAccount(evt)}>Submit</button>
+						<button className="d-button blue" onClick={(event) => this.signIntoAccount(event)}>Submit</button>
 
 						<div className="clear-float"></div>
+						<div className="errors">{this.state.error}</div>
 					</div>
 				</div>
 			);
@@ -132,15 +163,16 @@ class SignIn extends Component {
 					<div className="account-form">
 						<label>Create an account</label>
 
-						<input type="text" placeholder="Email" onChange={(evt) => this.updateState({ email: evt.target.value })} value={this.email} />
-						<input type="text" placeholder="Full Name" onChange={(evt) => this.updateState({ fullname: evt.target.value })} value={this.fullname} />
-						<input type="password" placeholder="Password" onChange={(evt) => this.updateState({ password: evt.target.value })} value={this.password} />
-						<input type="password" placeholder="Confirm Password" onChange={(evt) => this.updateState({ confirmPassword: evt.target.value })} value={this.confirmPassword} />
+						<input className="email" type="text" placeholder="Email" />
+						<input className="password" type="password" placeholder="Password" />
+						<input className="confirm-password" type="password" placeholder="Confirm Password" />
+						<input className="fullname" type="text" placeholder="Full Name" />
 
 						<a className="toggle-text" onClick={() => this.toggleSignIn(true)}>Sign In</a>
-						<button className="d-button blue" onClick={(evt) => this.createAccount(evt)}>Submit</button>
+						<button className="d-button blue" onClick={(event) => this.createAccount(event)}>Submit</button>
 
 						<div className="clear-float"></div>
+						<div className="errors">{this.state.error}</div>
 					</div>
 				</div>
 			);
@@ -148,63 +180,28 @@ class SignIn extends Component {
 	}
 }
 
-const parseStateParams = ({ email, password, confirmPassword, fullname, error }) => {
-	const update = {};
-
-	// set email if email was provided
-	if (email !== undefined && email !== null) {
-		update.email = email;
+const handleError = (err) => {
+	if (!(err && err.code)) {
+		window.console.log(err);
+		throw new Error("handleError only accepts firebase error objects");
 	}
 
-	// set password if password was provided
-	if (password !== undefined && password !== null) {
-		update.password = password;
+	let msg = "An unknown error has occured";
+	if (err.code === "auth/email-already-in-use") {
+		msg = "Email is already in use";
+	} else if (err.code === "auth/weak-password") {
+		msg = "Password is too weak";
+	} else if (err.code === "auth/invalid-email") {
+		msg = "Email or password is invalid"
+	} else if (err.code === "auth/user-disabled") {
+		msg = "Your account is locked"
+	} else if (err.code === "auth/user-not-found") {
+		msg = "Email or password is invalid"
+	} else if (err.code === "auth/wrong-password") {
+		msg = "Email or password is invalid"
 	}
-
-	// set confirmPassword if confirmPassword was provided
-	if (confirmPassword !== undefined && confirmPassword !== null) {
-		update.confirmPassword = confirmPassword;
-	}
-
-	// set fullname if fullname was provided
-	if (fullname !== undefined && fullname !== null) {
-		update.fullname = fullname;
-	}
-
-	if (error !== undefined && error !== null) {
-		update.error = error;
-	}
-	return update;
+	return msg;
 };
-
-const sendSignIn = ({ email, password }) => {
-	// handle error state if invaled input
-	if (!(email && password && email.length && password.length)) {
-		return reject(SIGNIN_FAIL_ERROR);
-	}
-
-	const data = {
-		email,
-		password: encryptPassword(password),
-	};
-
-	window.console.log('sign in', data);
-	return resolve(data);
-};
-
-const sendCreate = ({ email, fullname, password, confirmPassword }) => {
-	if (!(email && email.length)) return reject("Email is required");
-	if (!(fullname && fullname.length)) return reject("Full Name is required");
-	if (!(password && password.length)) return reject("Password is required");
-	if (!(confirmPassword && confirmPassword.length)) return reject("Confirm password is required");
-	if (password !== confirmPassword) return reject("Password does not match");
-
-	const data = { email, fullname, password: encryptPassword(password) };
-
-	window.console.log('create account', data);
-	return resolve(data);
-};
-
 
 SignIn.propTypes = {
 	signUp: PropTypes.bool

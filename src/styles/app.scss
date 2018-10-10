@@ -2,76 +2,108 @@
 @import './base';
 
 
-#application {
+
+.application-main {
 	width: 100%;
 	height: 100%;
+	padding: 56px 0 0;
+	background-color: $color-white;
 	overflow: hidden;
+	box-sizing: border-box;
 
-	& > .application-main {
+	& > .application-header {
 		width: 100%;
-		height: 100%;
-		padding: 56px 0 0;
-		overflow: hidden;
+		height: 56px;
+		margin: -56px 0 0;
+		padding: 5px 20px;
+		background-color: $color-black;
+		color: $color-blue;
 		box-sizing: border-box;
 
-		& > .application-header {
-			width: 100%;
-			height: 56px;
-			margin: -56px 0 0;
-			padding: 5px 20px;
-			background-color: $color-black;
-			color: $color-blue;
-			box-sizing: border-box;
+		& > .application-logo {
+			float: left;
+			font-size: 32px;
+			line-height: 46px;
+		}
 
-			& > .application-logo {
-				float: left;
-				font-size: 32px;
+		& > .application-user {
+			float: right;
+			cursor: pointer;
+
+			& > label {
+				color: $color-white;
 				line-height: 46px;
+				cursor: pointer;
+
+				& > span {
+					padding: 12px 0 0 8px;
+					float: right;
+
+					& > span {
+						border: 5px solid $color-lightgrey;
+						border-right-color: transparent;
+						border-bottom-color: transparent;
+						border-left-color: transparent;
+					}
+				}
 			}
 
-			& > .add-container {
-				width: 46px;
-				height: 46px;
-				padding: 5px 0;
-				float: right;
-				box-sizing: border-box;
+			& > .menu-container {
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100vw;
+				height: 100vh;
+				background-color: rgba(0, 0, 0, .2);
+				cursor: default;
+				z-index: 10;
 
-				& > .add-transaction {
-					width: 46px;
-					height: 36px;
+				& > .menu {
+					position: absolute;
+					top: 60px;
+					right: 15px;
+					padding: 15px 0;
 					border-radius: 3px;
-					background-color: $color-green;
-					color: lighten($color-black, 20%);
-					font-size: 32px;
-					line-height: 37px;
-					text-align: center;
-					cursor: pointer;
+					background-color: $color-black;
+
+					& > span {
+						min-width: 150px;
+						padding: 5px 10px;
+						float: left;
+						// border: 0 solid darken($color-darkgrey, 17%);
+						// border-top-width: 1px;
+						color: $color-lightgrey;
+						font-size: 14px;
+						text-align: left;
+						cursor: pointer;
+
+						// &:last-of-type {
+						//   border-bottom-width: 1px;
+						// }
+					}
+				}
+			}
+
+			&.active {
+				& > .menu-container {
+					display: block;
 				}
 			}
 		}
+	}
 
-		& > .application-body {
-			width: 100%;
-			height: 100%;
-			padding: 30px 40px;
-			overflow: hidden;
-			overflow-y: auto;
-			box-sizing: border-box;
+	& > .application-body {
+		width: 100%;
+		height: 100%;
+		padding: 30px 40px;
+		overflow: hidden;
+		overflow-y: auto;
+		box-sizing: border-box;
 
-			@media screen and (max-width: 1000px) {
-				padding: 20px 10px;
-			}
-
-			& > .chart-data {
-				width: 100%;
-				min-height: 100px;
-				border: 1px solid $color-lightgrey;
-			}
-
-			& > .raw-data {
-				width: 100%;
-				height: auto;
-			}
+		@media screen and (max-width: 1000px) {
+			padding: 20px 10px;
 		}
 	}
 }
+

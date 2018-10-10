@@ -17,6 +17,6 @@ module.exports = {
     browser: true,
     node: true
   },
-  rules: {
-  }
+  rules: {},
+	globals: { process: true }
 };

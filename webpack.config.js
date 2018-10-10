@@ -60,7 +60,7 @@ module.exports = {
   },
 
 	plugins: [
-    new Dotenv(),
+		new Dotenv({ path: './.env' }),
 		new CleanWebpackPlugin(['dist']),
 		new HtmlWebpackPlugin({
 			template: './public/index.html',

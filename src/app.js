@@ -5,9 +5,8 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 import '@app/styles/app.scss';
-
-import SidePanel from '@app/components/side-panel';
-import TransactionList from '@app/components/transaction-list';
+import injectService from '@app/utils/inject-service';
+import Dashboard from '@app/components/dashboard';
 
 /**
  * `App`
@@ -20,50 +19,42 @@ class App extends Component {
 	constructor() {
 		super();
 
+		this.firebase = injectService('firebase');
+
 		// setup init state for SidePanel child element
-		this.state = { showSidePanel: false };
+		this.state = { isMenuOpen: false };
 	}
 
-	/**
-	 * Event callback to show the side menu
-	 *
-	 * @private
-	 * @method closeTransaction
-	 */
-	addTransaction() {
-		this.setState({ showSidePanel: true });
+	signout() {
+		this.firebase.auth.signOut();
 	}
 
-	/**
-	 * Event callback to hide the side menu
-	 *
-	 * @private
-	 * @method closeTransaction
-	 */
-	closeTransaction() {
-		this.setState({ showSidePanel: false });
+	openMenu() {
+		this.setState({ isMenuOpen: true });
+	}
+
+	closeMenu() {
+		this.setState({ isMenuOpen: false });
 	}
 
 	render() {
+		const menuClass = "application-user" + (this.state.isMenuOpen ? " active" : "");
+
 		return (
 			<div className="application-main">
 				<div className="application-header">
 					<div className="application-logo">Budget</div>
-
-					<div className="add-container">
-						<div className="add-transaction" onClick={() => this.addTransaction()}>+</div>
+					<div className={menuClass} onClick={() => this.openMenu()}>
+						<label>{this.firebase.auth.currentUser.displayName}<span><span></span></span></label>
+						<div className="menu-container" onClick={() => this.closeMenu()}>
+							<div className="menu">
+								<span onClick={() => this.signout()}>Sign out</span>
+							</div>
+						</div>
 					</div>
 				</div>
-
 				<div className="application-body">
-					<SidePanel isShowing={this.state.showSidePanel} onClose={() => this.closeTransaction()} />
-
-					<div className="chart-data">
-					</div>
-
-					<div className="raw-data">
-						<TransactionList />
-					</div>
+					<Dashboard />
 				</div>
 			</div>
 		);

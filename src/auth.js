@@ -2,52 +2,13 @@
  * @module Auth
  *
  */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import '@app/styles/auth.scss';
+import injectService from '@app/utils/inject-service';
 import SignIn from '@app/components/sign-in';
 
 /***/
-const AUTH_KEY = 'x-application-au';
-
-/**
- * get the auth user from local storage
- *
- * @method getAuthUser
- * @return {object}
- */
-export const getAuthUser = () => {
-	// get auth user
-	const authUser = localStorage.getItem(AUTH_KEY);
-
-	if (authUser && authUser.length) {
-		// auth user returned
-		return Object.assign({}, { isAuthenticated: true }, JSON.parse(authUser));
-	} else {
-		// no auth returned
-		return { isAuthenticated: false };
-	}
-};
-
-/**
- * Clear the auth user from local storage
- *
- * @method clearAuthUser
- */
-export const clearAuthUser = () => {
-	localStorage.removeItem(AUTH_KEY);
-};
-
-/**
- * save the auth user to local storage
- *
- * @method setAuthUser
- * @param auth {object} the logged in user record
- */
-const setAuthUser = (auth) => {
-	// store the auth user for the user session
-	localStorage.setItem(AUTH_KEY, JSON.parse(auth));
-};
-
 /**
  * `Auth`
  *
@@ -55,17 +16,46 @@ const setAuthUser = (auth) => {
  *
  * @class Auth
  */
-const Auth = ({ children }) => {
-	// get the user session if there is one
-	const authUser = getAuthUser();
+class Auth extends Component {
 
-	// if authenticated then show logged in app
-	if (authUser.isAuthenticated) {
-		return <div className="authenticated">{children}</div>;
-	} else { // show sign in page
-		return <SignIn onSave={setAuthUser} />
+	constructor() {
+		super();
+
+		this.state = {
+			// boolean auth flag
+			isAuthenticated: false,
+			isLoaded: false,
+			authUser: null
+		};
+
+		// setup firebase service
+		this.firebase = injectService('firebase');
+
+		this.firebase.auth.onAuthStateChanged(user => {
+			this.setState({
+				isAuthenticated: !user ? false : true,
+				authUser: !user ? null : user,
+				isLoaded: true
+			});
+		});
 	}
-};
+
+	render() {
+		if (this.state.isLoaded) {
+			// if authenticated then show logged in app
+			if (this.state.isAuthenticated) {
+				return <div className="application-auth authenticated">{this.props.children}</div>;
+			} else { // show sign in page
+				return <SignIn />
+			}
+		}
+		return (
+			<div className="application-auth splash-screen">
+				<div className="application-logo">Budget</div>
+			</div>
+		);
+	}
+}
 
 Auth.propTypes = {
 	children: PropTypes.element
