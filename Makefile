@@ -15,3 +15,6 @@ build:
 
 prod:
 	NODE_ENV=production webpack
+
+deploy: prod
+	yarn deploy

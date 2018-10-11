@@ -8,8 +8,7 @@
   "directories": {},
   "repository": "git@github.com:sstephens/budget.git",
   "scripts": {
-    "start": "webpack-dev-server",
-    "build": "webpack"
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
