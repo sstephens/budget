@@ -36,8 +36,9 @@
 				cursor: pointer;
 
 				& > span {
-					padding: 12px 0 0 8px;
+					padding: 27px 0 0 8px;
 					float: right;
+					line-height: 1;
 
 					& > span {
 						border: 5px solid $color-lightgrey;
@@ -96,14 +97,7 @@
 	& > .application-body {
 		width: 100%;
 		height: 100%;
-		padding: 30px 40px;
 		overflow: hidden;
-		overflow-y: auto;
-		box-sizing: border-box;
-
-		@media screen and (max-width: 1000px) {
-			padding: 20px 10px;
-		}
 	}
 }
 

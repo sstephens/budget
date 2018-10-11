@@ -32,6 +32,10 @@ class Auth extends Component {
 		this.firebase = injectService('firebase');
 
 		this.firebase.auth.onAuthStateChanged(user => {
+			if (user) {
+				this.firebase.auth.currentUser.reload();
+			}
+
 			this.setState({
 				isAuthenticated: !user ? false : true,
 				authUser: !user ? null : user,

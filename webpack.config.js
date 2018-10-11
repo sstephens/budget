@@ -23,6 +23,7 @@ module.exports = {
 
 	resolve: {
 		alias: {
+			//"chart.js": "chartjs",
 			'@app': path.resolve(__dirname, 'src')
 		},
     extensions: ['*', '.json', '.js', '.jsx']

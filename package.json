@@ -40,10 +40,15 @@
     "webpack-dev-server": "^3.1.9"
   },
   "dependencies": {
+    "chart.js": "2.7",
     "firebase": "^5.5.3",
+    "lodash": "^4.17.11",
     "node-fetch": "^2.2.0",
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
+    "react-chartjs": "^1.2.0",
+    "react-chartjs-2": "^2.7.4",
+    "react-chartjs2": "^1.2.1",
     "react-dom": "^16.5.2",
     "rsvp": "^4.8.4"
   },
