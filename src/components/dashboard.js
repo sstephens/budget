@@ -4,6 +4,7 @@
  */
 import React, { Component } from 'react';
 import '@app/styles/components/dashboard.scss';
+import normalizeDocref from '@app/utils/normalize-docref';
 import injectService from '@app/utils/inject-service';
 import AddTransaction from '@app/components/add-transaction';
 import TransactionList from '@app/components/transaction-list';
@@ -39,11 +40,22 @@ class Dashboard extends Component {
 		this.load();
 	}
 
+	/**
+	 * restets isLoaded to false and calls load
+	 *
+	 * @method reloadData
+	 */
 	reloadData() {
 		this.setState(Object.assign({}, this.state, { isLoaded: false }));
 		this.load();
 	}
 
+	/**
+	 * load data from firestore to get all transactions
+	 * for the auth user
+	 *
+	 * @method load
+	 */
 	load() {
 		if (process.env.TESTING) {
 			// time simulates an async api call waiting
@@ -57,10 +69,18 @@ class Dashboard extends Component {
 			.where("userid", "==", this.user.uid)
 			.get()
 			.then(snapshot => {
+				// TODO:
+				// firestore occasionally decides not to load
+				// this is a temporary solution until
+				// a real solution is found. If the data
+				// is returned from cache then call load again
+				// util a non cached value is found.
 				if (snapshot.metadata.fromCache) {
 					this.load();
 				} else {
-					this.setState(Object.assign({}, this.state, { models: snapshot.docs, isLoaded: true }))
+					// normalize data and update state
+					const models = normalizeDocref(snapshot.docs, { amount: 'float' });
+					this.setState(Object.assign({}, this.state, { models, isLoaded: true }))
 				}
 			})
 	}
@@ -86,7 +106,6 @@ class Dashboard extends Component {
 	}
 
 	render() {
-
 		return (
 			<div className="c-dashboard">
 				<div className="add-container">
@@ -96,21 +115,21 @@ class Dashboard extends Component {
 				<AddTransaction isShowing={this.state.showSidePanel} onClose={() => this.closeTransaction()} onSave={() => this.reloadData()} />
 
 				{(() => {
-					if (!this.state.isLoaded) {
+					if (!this.state.isLoaded) { // handle state loading
 						return (
 							<div className="budget-data empty">
 								<div className="loading">Loading...</div>
 							</div>
 						);
 					} else {
-						if (this.state.models && this.state.models.length) {
+						if (this.state.models && this.state.models.length) { // state is loaded and models found
 							return (
 								<div className="budget-data">
 									<TransactionCharts models={this.state.models} />
 									<TransactionList models={this.state.models} />
 								</div>
 							);
-						} else {
+						} else { // state is loaded and no models found
 							return (
 								<div className="budget-data empty">
 									<h1>Create your first Budget Item</h1>

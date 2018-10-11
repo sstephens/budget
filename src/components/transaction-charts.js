@@ -51,7 +51,7 @@ const TrasactionCharts = ({ models }) => {
  * @return {object}
  */
 const modifyData = (key, data) => {
-	const values = dataFor(key, normalizeDataRefs(data));
+	const values = dataFor(key, data);
 	return {
 		labels: values.map(v => v.label),
 		datasets: [{
@@ -73,22 +73,6 @@ const modifyData = (key, data) => {
 			borderWidth: 1
 		}]
 	};
-};
-
-/**
- * normalizes the firebase refDocs into
- * regular json objects
- *
- * @method normalizeDataRefs
- * @param data {object[]}
- * @return {object[]}
- */
-const normalizeDataRefs = (data) => {
-	return data.map(ref => {
-		let d = ref.data(); // get json data
-		d.amount = parseFloat(d.amount); // convert amount to float
-		return d;
-	});
 };
 
 /**

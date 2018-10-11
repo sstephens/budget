@@ -15,21 +15,73 @@ import SuperString from '@app/components/super-string';
  * @class TrasactionList
  */
 class TrasactionList extends Component {
+	constructor() {
+		super();
+
+		this.state = {
+			sortBy: 'title',
+			sortDir: 'asc'
+		};
+	}
+
+	/**
+	 * change the sort by and sort dir props
+	 *
+	 * @method sortBy
+	 * @param type {string}
+	 */
+	sortBy(type) {
+		let dir = 'asc';
+		if (this.state.sortBy === type) {
+			if (this.state.sortDir === 'asc') {
+				dir = 'desc';
+			}
+		}
+		this.setState({ sortBy: type, sortDir: dir });
+	}
+
+	/**
+	 * sort a docRef array by the props currently set in
+	 * the state obj.
+	 *
+	 * @method sortData
+	 * @param data {object[]} unsorted object array
+	 * @returns {object[]} sorted object array
+	 */
+	sortData(data) {
+		// the key to sort data by
+		const key = this.state.sortBy;
+
+		// takes two objects and returns direction a should move in reference to b
+		const moveUpDown = (a, b) => (a[key] < b[key] ? 1 : (b[key] < a[key] ? -1 : 0))
+
+		return data.sort((a, b) =>
+			this.state.sortDir === 'asc' ? moveUpDown(b, a) : moveUpDown(a, b)
+		);
+	}
+
 	render() {
 		if (this.props.models && this.props.models.length) {
+			// sort data according to state.{sortby, sortDir}
+			const models = this.sortData(this.props.models);
+			const sortBy = this.state.sortBy;
+
+			// setup sort classes for headers
+			const activeSort = `t-item sortable ${this.state.sortDir}`;
+			const inactiveSort = "t-item sortable";
+
 			return (
 				<div className="c-transaction-list" ref={this.listRef}>
 					<div className="transaction-header">
-						<span className="t-item">Title</span>
-						<span className="t-item">Category</span>
-						<span className="t-item">Amount</span>
+						<span className={sortBy === 'title' ? activeSort : inactiveSort} onClick={() => this.sortBy('title')}>Title</span>
+						<span className={sortBy === 'category' ? activeSort : inactiveSort} onClick={() => this.sortBy('category')}>Category</span>
+						<span className={sortBy === 'amount' ? activeSort : inactiveSort} onClick={() => this.sortBy('amount')}>Amount</span>
 						<span className="t-item">Notes</span>
 					</div>
 
 					<div className="transaction-body">
 						{(() => {
-							return this.props.models.map((docRef, idx) => {
-								const model = docRef.data();
+							return models.map((model, idx) => {
 								return (
 									<div className="transaction-item" key={idx}>
 										<span className="t-item title" title={model.title}>{model.title}</span>
