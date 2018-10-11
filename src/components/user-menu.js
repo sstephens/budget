@@ -1,22 +1,19 @@
 /**
- * @module App
+ * @module Components
  *
  */
 import React, { Component } from 'react';
-import { hot } from 'react-hot-loader';
-import '@app/styles/app.scss';
+import '@app/styles/components/user-menu.scss';
 import injectService from '@app/utils/inject-service';
-import UserMenu from '@app/components/user-menu';
-import Dashboard from '@app/components/dashboard';
 
 /**
- * `App`
+ * `UserMenu`
  *
- * Main application instance
+ * User menu for log out and someday account settings
  *
- * @class App
+ * @class UserMenu
  */
-class App extends Component {
+class UserMenu extends Component {
 	constructor() {
 		super();
 
@@ -60,21 +57,21 @@ class App extends Component {
 	}
 
 	render() {
+		// gennerate class name for user menu
+		const menuClass = "c-user-menu" + (this.state.isMenuOpen ? " active" : "");
 
 		return (
-			<div className="application-main">
-				<div className="application-header">
-					<div className="application-logo">Budget</div>
+			<div className={menuClass} onClick={() => this.openMenu()}>
+				<label>{this.firebase.auth.currentUser.displayName}<span><span></span></span></label>
 
-					<UserMenu />
-				</div>
-
-				<div className="application-body">
-					<Dashboard />
+				<div className="menu-container" onClick={() => this.closeMenu()}>
+					<div className="menu">
+						<span onClick={() => this.signout()}>Sign out</span>
+					</div>
 				</div>
 			</div>
 		);
 	}
 }
 
-export default hot(module)(App);
+export default UserMenu;

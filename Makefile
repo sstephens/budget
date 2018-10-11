@@ -8,7 +8,7 @@ install:
 reinstall: remove-install install
 
 serve:
-	NODE_ENV=development webpack-dev-server
+	NODE_ENV=development yarn webpack-dev-server
 
 build:
 	NODE_ENV=development webpack

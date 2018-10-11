@@ -132,8 +132,8 @@ class Dashboard extends Component {
 						} else { // state is loaded and no models found
 							return (
 								<div className="budget-data empty">
-									<h1>Create your first Budget Item</h1>
-									<h2>Click on the plus button to get started.</h2>
+									<h1>Create your Budget</h1>
+									<h2>Click the plus button to get started.</h2>
 								</div>
 							);
 						}

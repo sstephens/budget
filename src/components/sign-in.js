@@ -148,7 +148,7 @@ class SignIn extends Component {
 						<input className="email" type="text" placeholder="Email" />
 						<input className="password" type="password" placeholder="Password" />
 
-						<a className="toggle-text" onClick={() => this.toggleSignIn(false)}>Create Account</a>
+						<a className="toggle-text" onClick={() => this.toggleSignIn(false)}>Create a new account.</a>
 						<button className="d-button blue" onClick={(event) => this.signIntoAccount(event)}>Submit</button>
 
 						<div className="clear-float"></div>
@@ -161,14 +161,14 @@ class SignIn extends Component {
 				<div className="c-sign-in create-account">
 					<div className="logo">Budget</div>
 					<div className="account-form">
-						<label>Create an account</label>
+						<label>Create account</label>
 
 						<input className="email" type="text" placeholder="Email" />
 						<input className="password" type="password" placeholder="Password" />
 						<input className="confirm-password" type="password" placeholder="Confirm Password" />
 						<input className="fullname" type="text" placeholder="Full Name" />
 
-						<a className="toggle-text" onClick={() => this.toggleSignIn(true)}>Sign In</a>
+						<a className="toggle-text" onClick={() => this.toggleSignIn(true)}>I already have an account!</a>
 						<button className="d-button blue" onClick={(event) => this.createAccount(event)}>Submit</button>
 
 						<div className="clear-float"></div>

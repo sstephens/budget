@@ -1,0 +1,69 @@
+
+@import '../base';
+
+.c-user-menu {
+	float: right;
+	cursor: pointer;
+
+	& > label {
+		color: $color-white;
+		line-height: 46px;
+		cursor: pointer;
+
+		& > span {
+			padding: 27px 0 0 8px;
+			float: right;
+			line-height: 1;
+
+			& > span {
+				border: 5px solid $color-lightgrey;
+				border-right-color: transparent;
+				border-bottom-color: transparent;
+				border-left-color: transparent;
+			}
+		}
+	}
+
+	& > .menu-container {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background-color: rgba(0, 0, 0, .2);
+		cursor: default;
+		z-index: 10;
+
+		& > .menu {
+			position: absolute;
+			top: 60px;
+			right: 15px;
+			padding: 15px 0;
+			border-radius: 3px;
+			background-color: $color-black;
+
+			& > span {
+				min-width: 150px;
+				padding: 5px 10px;
+				float: left;
+				// border: 0 solid darken($color-darkgrey, 17%);
+				// border-top-width: 1px;
+				color: $color-lightgrey;
+				font-size: 14px;
+				text-align: left;
+				cursor: pointer;
+
+				// &:last-of-type {
+				//   border-bottom-width: 1px;
+				// }
+			}
+		}
+	}
+
+	&.active {
+		& > .menu-container {
+			display: block;
+		}
+	}
+}

@@ -19,14 +19,14 @@
 		& > .add-transaction {
 			width: 45px;
 			height: 45px;
-			border: 1px solid darken($color-green, 10%);
+			border: 1px solid steelblue; //darken($color-blue, 15%);
 			border-radius: 23px;
-			background-color: $color-green;
-			color: $color-darkgrey;
+			background-color: cornflowerblue;
+			color: $color-white;
 			font-size: 32px;
 			line-height: 47px;
 			text-align: center;
-			box-shadow: 1px 1px 6px -3px $color-black;
+			box-shadow: 1px 1px 10px -3px $color-black;
 			cursor: pointer;
 		}
 	}
@@ -44,8 +44,10 @@
 		}
 
 		&.empty {
+			padding: 100px 0 0;
+
 			& > h1 {
-				color: $color-darkgrey;
+				color: mediumseagreen;
 				font-size: 36px;
 				line-height: 1;
 				text-align: center;
