@@ -127,6 +127,18 @@ class SignIn extends Component {
 			.catch(error => this.triggerError(error));
 	}
 
+	shouldSubmitSignIn(evt) {
+		if (evt.keyCode === 13) {
+			this.signIntoAccount(evt);
+		}
+	}
+
+	shouldSubmitSignUp(evt) {
+		if (evt.keyCode === 13) {
+			this.createAccount(evt);
+		}
+	}
+
 	render() {
 		// get isSignIn state
 		let isSignIn = this.state.isSignIn;
@@ -142,7 +154,7 @@ class SignIn extends Component {
 			return (
 				<div className="c-sign-in">
 					<div className="logo">Budget</div>
-					<div className="account-form">
+					<div className="account-form" onKeyUp={(event) => this.shouldSubmitSignIn(event)}>
 						<label>Sign In</label>
 
 						<input className="email" type="text" placeholder="Email" />
@@ -160,7 +172,7 @@ class SignIn extends Component {
 			return (
 				<div className="c-sign-in create-account">
 					<div className="logo">Budget</div>
-					<div className="account-form">
+					<div className="account-form" onKeyUp={(event) => this.shouldSubmitSignUp(event)}>
 						<label>Create account</label>
 
 						<input className="email" type="text" placeholder="Email" />
