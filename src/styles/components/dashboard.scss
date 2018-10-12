@@ -43,8 +43,30 @@
 			padding: 20px 10px;
 		}
 
+		& > .total-budget {
+			width: 100%;
+			margin: 0 0 20px;
+			padding: 0 20px;
+			border-radius: 3px;
+			background-color: mediumseagreen;
+			//background-color: darken($color-offwhite, 5%);
+			box-sizing: border-box;
+
+			& > span {
+				float: left;
+				color: white;
+				font-size: 26px;
+				font-weight: bold;
+				line-height: 51px;
+
+				&:last-of-type {
+					float: right;
+				}
+			}
+		}
+
 		&.empty {
-			padding: 100px 0 0;
+			padding: 200px 0 0;
 
 			& > h1 {
 				color: mediumseagreen;

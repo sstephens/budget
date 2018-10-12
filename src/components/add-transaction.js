@@ -68,6 +68,12 @@ class AddTransaction extends Component {
 	 * @method saveBudget
 	 */
 	saveBudget() {
+		if (this.isSaving) {
+			return;
+		}
+
+		this.isSaving = true;
+
 		// get form container
 		const container = this.form.current;
 
@@ -88,9 +94,13 @@ class AddTransaction extends Component {
 			personal: true,
 			title: elName.value.trim(),
 			category: elCategory.value.trim(),
-			amount: elAmount.value.trim(),
+			amount: parseFloat(elAmount.value.trim().replace(/^\$$/, '')),
 			notes: elNotes.value.trim()
 		};
+
+		if (isNaN(data.amount)) {
+			data.amount = 0;
+		}
 
 		this.firebase.db
 			.collection('transaction').add(data)
@@ -99,13 +109,13 @@ class AddTransaction extends Component {
 				elCategory.value = '';
 				elAmount.value = '';
 				elNotes.value = '';
+				this.isSaving = false;
 				return this.afterSave(ref);
 			})
 			.catch(error => window.console.log('Error: ', error));
 	}
 
-	afterSave(docRef) {
-		window.console.log('docRef', docRef);
+	afterSave() {
 		if (this.props.onSave) {
 			this.props.onSave();
 		}
@@ -149,17 +159,18 @@ class AddTransaction extends Component {
 						<div className="budget-form" ref={this.form} onKeyUp={(event) => this.shouldSubmit(event)}>
 							<div className="form-item">
 								<label>Title</label>
-								<input className="bf-name" type="text" />
+								<input className="bf-name" type="text" placeholder="Amazon, WalMart..."/>
 							</div>
 
 							<div className="form-item">
 								<label>Category</label>
-								<input className="bf-category" type="text" />
+								<input className="bf-category" type="text" placeholder="Gas, Groceries..."/>
 							</div>
 
-							<div className="form-item">
+							<div className="form-item currency">
 								<label>Amount</label>
-								<input className="bf-amount" type="text" />
+								<span>$</span>
+								<input className="bf-amount" type="text" placeholder="0.00"/>
 							</div>
 
 

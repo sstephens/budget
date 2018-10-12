@@ -123,8 +123,14 @@ class Dashboard extends Component {
 						);
 					} else {
 						if (this.state.models && this.state.models.length) { // state is loaded and models found
+							const totalExpense = (this.state.models.reduce((a, b) => a + b.amount, 0)).toFixed(2);
 							return (
 								<div className="budget-data">
+									<div className="total-budget">
+										<span>Total Expenses</span>
+										<span>${totalExpense}</span>
+										<div className="clear-float"></div>
+									</div>
 									<TransactionCharts models={this.state.models} />
 									<TransactionList models={this.state.models} />
 								</div>
@@ -133,7 +139,7 @@ class Dashboard extends Component {
 							return (
 								<div className="budget-data empty">
 									<h1>Create your Budget</h1>
-									<h2>Click the plus button to get started.</h2>
+									<h2>Click the plus button to start.</h2>
 								</div>
 							);
 						}

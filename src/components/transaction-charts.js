@@ -57,11 +57,11 @@ const modifyData = (key, data) => {
 		datasets: [{
 			data: values.map(v => v.totalFixed),
 			backgroundColor: [
-				'rgba(30, 144, 255, .5)',
-				'rgba(124, 252, 0, .5)',
-				'rgba(255, 0, 0, .5)',
-				'rgba(64, 224, 208, .5)',
-				'rgba(255, 140, 0, .5)',
+				'rgba(30, 144, 255, .7)',
+				'rgba(124, 252, 0, .7)',
+				'rgba(255, 0, 0, .7)',
+				'rgba(64, 224, 208, .7)',
+				'rgba(255, 140, 0, .7)',
 			],
 			borderColor: [
 				'rgba(30, 144, 255, 1)',

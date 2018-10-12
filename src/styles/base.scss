@@ -33,6 +33,10 @@ input {
 	line-height: 1;
 	box-sizing: border-box;
 
+	&::placeholder {
+		color: $color-lightgrey;
+	}
+
 	&:hover {
 		border-color: $color-blue;
 	}
